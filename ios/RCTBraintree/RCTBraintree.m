@@ -161,6 +161,39 @@ RCT_EXPORT_METHOD(getCardNonce: (NSDictionary *)parameters callback: (RCTRespons
                   }];
 }
 
+RCT_EXPORT_METHOD(getCardNonceThreeD: (NSDictionary *)parameters options:(NSDictionary *)options callback: (RCTResponseSenderBlock)callback)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BTCardClient *cardClient = [[BTCardClient alloc] initWithAPIClient: self.braintreeClient];
+        self.threeDSecure = [[BTThreeDSecureDriver alloc] initWithAPIClient:self.braintreeClient delegate:self];
+        BTCard *card = [[BTCard alloc] initWithParameters:parameters];
+        card.shouldValidate = YES;
+
+        NSString *amount = options[@"amount"];
+
+        [cardClient tokenizeCard:card completion:^(BTCardNonce *tokenizedCard, NSError *error) {
+            if ( error == nil ) {
+                [self.threeDSecure verifyCardWithNonce:tokenizedCard.nonce amount:(NSDecimalNumber *) amount completion:^(BTThreeDSecureCardNonce *card, NSError *error) {
+                    if (error != nil) {
+                        callback(@[error.localizedDescription, [NSNull null]]);
+                    } else if (card) {
+                        if (!card.liabilityShiftPossible) {
+                            callback(@[@"3DSECURE_NOT_ABLE_TO_SHIFT_LIABILITY", [NSNull null]]);
+                        } else if (!card.liabilityShifted) {
+                            callback(@[@"3DSECURE_LIABILITY_NOT_SHIFTED", [NSNull null]]);
+                        } else {
+                            callback(@[[NSNull null], card.nonce]);
+                        }
+                    } else {
+                        callback(@[@"USER_CANCELLATION", [NSNull null]]);
+                    }
+                }];
+            }
+
+        }];
+    });
+}
+
 RCT_EXPORT_METHOD(getDeviceData:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
 {
     dispatch_async(dispatch_get_main_queue(), ^{

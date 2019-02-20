@@ -79,6 +79,32 @@ var Braintree = {
     });
   },
 
+  getCardNonceThreeD(parameters: CardParameters = {}, options) {
+    return new Promise(function(resolve, reject) {
+      RCTBraintree.getCardNonceThreeD(mapParameters(parameters), options, function(
+        err,
+        nonce
+      ) {
+        let jsonErr = null;
+
+        try {
+          jsonErr = JSON.parse(err);
+        } catch (e) {
+          //
+        }
+
+        nonce !== null
+          ? resolve(nonce)
+          : reject(
+              jsonErr
+                ? jsonErr['BTCustomerInputBraintreeValidationErrorsKey'] ||
+                  jsonErr
+                : err
+            );
+      });
+    });
+  },
+
   getDeviceData(options = {}) {
     return new Promise(function(resolve, reject) {
       RCTBraintree.getDeviceData(options, function(err, deviceData) {
