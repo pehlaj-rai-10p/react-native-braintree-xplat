@@ -329,4 +329,9 @@ RCT_EXPORT_METHOD(getDeviceData:(NSDictionary *)options callback:(RCTResponseSen
     return modalRoot;
 }
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 @end
