@@ -196,6 +196,72 @@ public class Braintree extends ReactContextBaseJavaModule implements ActivityEve
     Card.tokenize(this.mBraintreeFragment, cardBuilder);
   }
 
+  @ReactMethod
+  public void getCardNonceThreeD(final ReadableMap parameters, final ReadableMap options, final Callback successCallback, final Callback errorCallback) {
+    this.successCallback = successCallback;
+    this.errorCallback = errorCallback;
+    String amount = null;
+
+    CardBuilder cardBuilder = new CardBuilder()
+      .validate(true);
+
+    if (parameters.hasKey("number"))
+      cardBuilder.cardNumber(parameters.getString("number"));
+
+    if (parameters.hasKey("cvv"))
+      cardBuilder.cvv(parameters.getString("cvv"));
+
+    // In order to keep compatibility with iOS implementation, do not accept expirationMonth and exporationYear,
+    // accept rather expirationDate (which is combination of expirationMonth/expirationYear)
+    if (parameters.hasKey("expirationDate"))
+      cardBuilder.expirationDate(parameters.getString("expirationDate"));
+
+    if (parameters.hasKey("cardholderName"))
+      cardBuilder.cardholderName(parameters.getString("cardholderName"));
+
+    if (parameters.hasKey("firstName"))
+      cardBuilder.firstName(parameters.getString("firstName"));
+
+    if (parameters.hasKey("lastName"))
+      cardBuilder.lastName(parameters.getString("lastName"));
+
+    if (parameters.hasKey("company"))
+      cardBuilder.company(parameters.getString("company"));
+
+    if (parameters.hasKey("countryName"))
+      cardBuilder.countryName(parameters.getString("countryName"));
+
+    if (parameters.hasKey("countryCodeAlpha2"))
+      cardBuilder.countryCodeAlpha2(parameters.getString("countryCodeAlpha2"));
+
+    if (parameters.hasKey("countryCodeAlpha3"))
+      cardBuilder.countryCodeAlpha3(parameters.getString("countryCodeAlpha3"));
+
+    if (parameters.hasKey("countryCodeNumeric"))
+      cardBuilder.countryCodeNumeric(parameters.getString("countryCodeNumeric"));
+
+    if (parameters.hasKey("locality"))
+      cardBuilder.locality(parameters.getString("locality"));
+
+    if (parameters.hasKey("postalCode"))
+      cardBuilder.postalCode(parameters.getString("postalCode"));
+
+    if (parameters.hasKey("region"))
+      cardBuilder.region(parameters.getString("region"));
+
+    if (parameters.hasKey("streetAddress"))
+      cardBuilder.streetAddress(parameters.getString("streetAddress"));
+
+    if (parameters.hasKey("extendedAddress"))
+      cardBuilder.extendedAddress(parameters.getString("extendedAddress"));
+
+    if (options.hasKey("amount")) {
+      this.threeDSecureOptions = options;
+    }
+
+    ThreeDSecure.performVerification(this.mBraintreeFragment, cardBuilder, String.valueOf(this.threeDSecureOptions.getDouble("amount")));
+  }
+
   public void nonceCallback(String nonce) {
     this.successCallback.invoke(nonce);
   }

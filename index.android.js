@@ -22,6 +22,17 @@ module.exports = {
     });
   },
 
+  getCardNonceThreeD(parameters = {}, options = {}) {
+    return new Promise(function(resolve, reject) {
+      Braintree.getCardNonceThreeD(
+        mapParameters(parameters),
+        mapParameters(options),
+        nonce => resolve(nonce),
+        err => reject(err)
+      );
+    });
+  },
+
   showPaymentViewController(config = {}) {
     var options = {
       callToActionText: config.callToActionText,
