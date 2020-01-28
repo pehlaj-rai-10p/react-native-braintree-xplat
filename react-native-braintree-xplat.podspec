@@ -10,10 +10,17 @@ Pod::Spec.new do |s|
   s.authors      = { "henninghall" => "henning.hall@hotmail.com" }
   s.homepage     = "https://github.com/kraffslol/react-native-braintree-xplat"
   s.license      = package['license']
-  s.platform     = :ios, "8.0"
+  s.platform     = :ios, "9.0"
 
   s.source       = { :git => "https://github.com/kraffslol/react-native-braintree-xplat.git" }
-  s.source_files  = "ios/RCTBraintree/RCTBraintree.{h,m}"
+
+  s.source_files  = "ios/**/*.{h,m}"
+
+  s.dependency 'Braintree', '~> 4.9.4'
+  s.dependency 'BraintreeDropIn'
+  s.dependency 'Braintree/PayPal'
+  s.dependency 'Braintree/3D-Secure'
+  s.dependency 'Braintree/DataCollector'
 
   s.dependency 'React'
 end
