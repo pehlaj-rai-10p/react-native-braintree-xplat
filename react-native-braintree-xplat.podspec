@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = "ios/**/*.{h,m}"
 
-  s.dependency 'Braintree', '~> 4.9.4'
+  s.dependency 'Braintree', '~> 4.11.0'
   s.dependency 'BraintreeDropIn'
   s.dependency 'Braintree/PayPal'
   s.dependency 'Braintree/3D-Secure'
