@@ -21,7 +21,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"
-    implementation 'com.braintreepayments.api:braintree:2.22.0'
+    implementation 'com.braintreepayments.api:braintree:3.15.0'
     implementation 'com.braintreepayments.api:drop-in:2.+'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
 }

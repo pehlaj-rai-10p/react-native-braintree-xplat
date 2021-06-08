@@ -9,10 +9,12 @@ import com.google.gson.Gson;
 import android.content.Intent;
 import android.content.Context;
 import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.braintreepayments.api.ThreeDSecure;
 import com.braintreepayments.api.PaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.braintreepayments.api.models.PayPalRequest;
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
@@ -66,7 +68,7 @@ public class Braintree extends ReactContextBaseJavaModule implements ActivityEve
   @ReactMethod
   public void setup(final String token, final Callback successCallback, final Callback errorCallback) {
     try {
-      this.mBraintreeFragment = BraintreeFragment.newInstance(getCurrentActivity(), token);
+      this.mBraintreeFragment = BraintreeFragment.newInstance((AppCompatActivity)getCurrentActivity(), token);
       this.mBraintreeFragment.addListener(new BraintreeCancelListener() {
         @Override
         public void onCancel(int requestCode) {
@@ -166,17 +168,17 @@ public class Braintree extends ReactContextBaseJavaModule implements ActivityEve
     if (parameters.hasKey("company"))
       cardBuilder.company(parameters.getString("company"));
 
-    if (parameters.hasKey("countryName"))
-      cardBuilder.countryName(parameters.getString("countryName"));
-
-    if (parameters.hasKey("countryCodeAlpha2"))
-      cardBuilder.countryCodeAlpha2(parameters.getString("countryCodeAlpha2"));
-
-    if (parameters.hasKey("countryCodeAlpha3"))
-      cardBuilder.countryCodeAlpha3(parameters.getString("countryCodeAlpha3"));
-
-    if (parameters.hasKey("countryCodeNumeric"))
-      cardBuilder.countryCodeNumeric(parameters.getString("countryCodeNumeric"));
+//    if (parameters.hasKey("countryName"))
+//      cardBuilder.countryName(parameters.getString("countryName"));
+//
+//    if (parameters.hasKey("countryCodeAlpha2"))
+//      cardBuilder.countryCodeAlpha2(parameters.getString("countryCodeAlpha2"));
+//
+//    if (parameters.hasKey("countryCodeAlpha3"))
+//      cardBuilder.countryCodeAlpha3(parameters.getString("countryCodeAlpha3"));
+//
+//    if (parameters.hasKey("countryCodeNumeric"))
+//      cardBuilder.countryCodeNumeric(parameters.getString("countryCodeNumeric"));
 
     if (parameters.hasKey("locality"))
       cardBuilder.locality(parameters.getString("locality"));
@@ -228,17 +230,17 @@ public class Braintree extends ReactContextBaseJavaModule implements ActivityEve
     if (parameters.hasKey("company"))
       cardBuilder.company(parameters.getString("company"));
 
-    if (parameters.hasKey("countryName"))
-      cardBuilder.countryName(parameters.getString("countryName"));
-
-    if (parameters.hasKey("countryCodeAlpha2"))
-      cardBuilder.countryCodeAlpha2(parameters.getString("countryCodeAlpha2"));
-
-    if (parameters.hasKey("countryCodeAlpha3"))
-      cardBuilder.countryCodeAlpha3(parameters.getString("countryCodeAlpha3"));
-
-    if (parameters.hasKey("countryCodeNumeric"))
-      cardBuilder.countryCodeNumeric(parameters.getString("countryCodeNumeric"));
+//    if (parameters.hasKey("countryName"))
+//      cardBuilder.countryName(parameters.getString("countryName"));
+//
+//    if (parameters.hasKey("countryCodeAlpha2"))
+//      cardBuilder.countryCodeAlpha2(parameters.getString("countryCodeAlpha2"));
+//
+//    if (parameters.hasKey("countryCodeAlpha3"))
+//      cardBuilder.countryCodeAlpha3(parameters.getString("countryCodeAlpha3"));
+//
+//    if (parameters.hasKey("countryCodeNumeric"))
+//      cardBuilder.countryCodeNumeric(parameters.getString("countryCodeNumeric"));
 
     if (parameters.hasKey("locality"))
       cardBuilder.locality(parameters.getString("locality"));
@@ -318,11 +320,13 @@ public class Braintree extends ReactContextBaseJavaModule implements ActivityEve
   public void paypalRequest(final Callback successCallback, final Callback errorCallback) {
     this.successCallback = successCallback;
     this.errorCallback = errorCallback;
-    PayPal.authorizeAccount(this.mBraintreeFragment);
+    PayPalRequest request = new PayPalRequest();
+    PayPal.requestBillingAgreement(this.mBraintreeFragment,request);
+//    PayPal.authorizeAccount(this.mBraintreeFragment);
   }
 
   @Override
-  public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent data) {
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     if (requestCode == PAYMENT_REQUEST) {
       switch (resultCode) {
         case Activity.RESULT_OK:
