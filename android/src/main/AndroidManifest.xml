@@ -6,7 +6,8 @@
     <application android:allowBackup="true" android:label="@string/app_name">
       <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
         android:launchMode="singleTask"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        android:exported="false">
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
